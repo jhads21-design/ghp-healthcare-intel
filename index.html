@@ -217,7 +217,7 @@
     try {
       const prompt = `You are a healthcare PE analyst for Great Hill Partners, a growth-oriented PE firm.
 
-Today's date is ${today}. Search the web for 3 healthcare PE news stories. Every story you include MUST have been published within the last 7 days. Before including any story, check its publication date. If it is older than 7 days, skip it and find another. If you cannot find 3 recent stories, only return the ones you find — do not pad with older stories.
+Today's date is ${today}. Search the web using queries like "healthcare PE deals this week" and "healthcare private equity news ${today.split(',')[1].trim()}" to find 3 significant recent healthcare PE stories. Always search for the most current results available.
 
 Respond in EXACTLY this format. No introduction, no extra text, just the stories:
 

@@ -195,7 +195,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 3000,
+        max_tokens: 2000,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: prompt }]
       })
@@ -220,7 +220,7 @@
     try {
       const prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
-Search the web for recent healthcare private equity news from the last 7 days. Find 8 significant stories across: PE deals/acquisitions, regulatory changes, fund activity, and market developments.
+Search the web for recent healthcare private equity news from the last 7 days. Find 3 significant stories across: PE deals/acquisitions, regulatory changes, fund activity, and market developments.
 
 You MUST respond with ONLY a valid JSON array. No introduction, no explanation, no markdown, no code fences. Start your response with [ and end with ].
 

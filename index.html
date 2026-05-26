@@ -1,1 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHP Healthcare Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --navy: #0C2340;
+    --navy-light: #163354;
+    --navy-border: rgba(255,255,255,0.1);
+    --blue-accent: #4A9FE0;
+    --blue-light: #E6F1FB;
+    --blue-mid: #185FA5;
+    --bg: #F2F4F7;
+    --surface: #ffffff;
+    --border: #E2E6EC;
+    --text-primary: #0C2340;
+    --text-secondary: #6B7A90;
+    --text-muted: #A0AABB;
+    --tag-deal-bg: #E6F1FB; --tag-deal-text: #185FA5;
+    --tag-reg-bg: #FAEEDA; --tag-reg-text: #854F0B;
+    --tag-fund-bg: #EEEDFE; --tag-fund-text: #534AB7;
+    --tag-news-bg: #EAF3DE; --tag-news-text: #3B6D11;
+    --tag-warning-bg: #FCEBEB; --tag-warning-text: #A32D2D;
+    --pewhat-bg: #E6F1FB; --pewhat-border: #B5D4F4; --pewhat-text: #0C447C; --pewhat-label: #185FA5;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--navy);
+    padding: 0 24px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-bottom: 0.5px solid var(--navy-border);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    background: var(--blue-accent);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0;
+  }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 0.5px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-md);
+    padding: 7px 14px;
+    width: 300px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .search-bar:focus-within {
+    background: rgba(255,255,255,0.11);
+    border-color: var(--blue-accent);
+  }
+  .search-bar svg { color: rgba(255,255,255,0.35); flex-shrink: 0; }
+  .search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 100%;
+  }
+  .search-bar input::placeholder { color: rgba(255,255,255,0.35); }
+  .search-type {
+    display: flex;
+    gap: 4px;
+  }
+  .search-type button {
+    background: none;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .search-type button.active, .search-type button:hover {
+    background: var(--blue-accent);
+    border-color: var(--blue-accent);
+    color: #fff;
+  }
+
+  /* TABS */
+  .tabs {
+    background: var(--navy);
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: 10px 18px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .tab:hover { color: rgba(255,255,255,0.75); }
+  .tab.active { color: #fff; border-bottom-color: var(--blue-accent); }
+
+  /* BODY LAYOUT */
+  .app-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* MAIN FEED */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+  }
+  .main::-webkit-scrollbar { width: 4px; }
+  .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+  }
+  .pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pill:hover, .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* FEED CARDS */
+  .feed-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .feed-card:hover {
+    border-color: var(--blue-accent);
+    box-shadow: 0 2px 12px rgba(74,159,224,0.08);
+  }
+  .feed-card.active { border-color: var(--blue-accent); border-width: 1px; }
+  .feed-tag {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .tag-deal { background: var(--tag-deal-bg); color: var(--tag-deal-text); }
+  .tag-reg { background: var(--tag-reg-bg); color: var(--tag-reg-text); }
+  .tag-fund { background: var(--tag-fund-bg); color: var(--tag-fund-text); }
+  .tag-news { background: var(--tag-news-bg); color: var(--tag-news-text); }
+  .feed-content { flex: 1; min-width: 0; }
+  .feed-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    line-height: 1.45;
+  }
+  .feed-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .feed-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 7px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .feed-meta-dot { width: 3px; height: 3px; background: var(--text-muted); border-radius: 50%; }
+  .chevron-icon { color: var(--border); flex-shrink: 0; margin-top: 2px; }
+
+  /* RIGHT PANEL */
+  .panel {
+    width: 360px;
+    background: var(--surface);
+    border-left: 0.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .panel-inner {
+    overflow-y: auto;
+    padding: 20px;
+    flex: 1;
+  }
+  .panel-inner::-webkit-scrollbar { width: 4px; }
+  .panel-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .panel-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .panel-company {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+  .private-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--tag-reg-text);
+    background: var(--tag-reg-bg);
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .public-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--tag-news-text);
+    background: var(--tag-news-bg);
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .panel-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .rec-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .rec-pursue { background: #EAF3DE; color: #3B6D11; }
+  .rec-pass { background: #FCEBEB; color: #A32D2D; }
+  .rec-watch { background: #FAEEDA; color: #854F0B; }
+
+  /* METRICS */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .metric {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .metric-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .metric-val {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* SECTION CARDS */
+  .divider { height: 0.5px; background: var(--border); margin: 14px 0; }
+
+  .section-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .section-card:hover { border-color: var(--blue-accent); }
+  .section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .section-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--blue-light);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-icon svg { color: var(--blue-mid); }
+  .section-preview {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 7px;
+    line-height: 1.55;
+  }
+  .expand-icon { color: var(--text-muted); transition: transform 0.2s; }
+  .section-card.open .expand-icon { transform: rotate(180deg); }
+  .section-body {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px solid var(--border);
+  }
+  .section-card.open .section-body { display: block; }
+  .section-body p {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .section-body ul {
+    padding-left: 16px;
+  }
+  .section-body li {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+
+  /* PE SO-WHAT */
+  .pewhat {
+    background: var(--pewhat-bg);
+    border: 0.5px solid var(--pewhat-border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-top: 4px;
+  }
+  .pewhat-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--pewhat-label);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .pewhat-text {
+    font-size: 12.5px;
+    color: var(--pewhat-text);
+    line-height: 1.6;
+  }
+
+  /* EMPTY STATE */
+  .empty-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px;
+    text-align: center;
+  }
+  .empty-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .empty-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
+  .empty-sub { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* SEARCH VIEW */
+  .search-view { display: none; }
+  .search-view.active { display: block; }
+  .feed-view { display: block; }
+  .feed-view.hidden { display: none; }
+
+  /* PLACEHOLDER PULSE */
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .loading-bar {
+    height: 11px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    animation: pulse 1.5s ease infinite;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">GHP</div>
+    Healthcare Intelligence
+  </div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div class="search-bar" id="searchBar">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search company or subsector..." />
+    </div>
+    <div class="search-type">
+      <button class="active" id="btnCompany" onclick="setSearchType('company')">Company</button>
+      <button id="btnSector" onclick="setSearchType('sector')">Subsector</button>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('feed', this)">Deal feed</div>
+  <div class="tab" onclick="switchTab('search', this)">Company search</div>
+  <div class="tab" onclick="switchTab('subsector', this)">Subsector search</div>
+</div>
+
+<div class="app-body">
+  <div class="main">
+
+    <!-- FEED VIEW -->
+    <div class="feed-view" id="feedView">
+      <div class="section-header">
+        <span class="section-label">Last 7 days — healthcare PE</span>
+        <div class="filter-pills">
+          <span class="pill active" onclick="filterFeed('all', this)">All</span>
+          <span class="pill" onclick="filterFeed('deal', this)">Deals</span>
+          <span class="pill" onclick="filterFeed('reg', this)">Regulatory</span>
+          <span class="pill" onclick="filterFeed('fund', this)">Funds</span>
+        </div>
+      </div>
+
+      <div class="feed-card" onclick="showPanel('amedisys')" data-tag="deal">
+        <span class="feed-tag tag-deal">Deal</span>
+        <div class="feed-content">
+          <div class="feed-title">KKR acquires Covenant Physician Partners in $1.8B take-private</div>
+          <div class="feed-sub">Multi-specialty physician management platform — 300+ physicians across 8 states. Exit from Warburg Pincus after 5-year hold.</div>
+          <div class="feed-meta">2 days ago <span class="feed-meta-dot"></span> WSJ Pro PE</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="feed-card" data-tag="reg">
+        <span class="feed-tag tag-reg">Regulatory</span>
+        <div class="feed-content">
+          <div class="feed-title">CMS proposes 2.9% Medicare Advantage rate cut for 2027</div>
+          <div class="feed-sub">Draft rule signals ongoing pressure on MA plans. Could accelerate provider consolidation as margins compress further.</div>
+          <div class="feed-meta">3 days ago <span class="feed-meta-dot"></span> Fierce Healthcare</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="feed-card" data-tag="fund">
+        <span class="feed-tag tag-fund">Fund activity</span>
+        <div class="feed-content">
+          <div class="feed-title">General Atlantic raises $3.2B for dedicated healthcare fund</div>
+          <div class="feed-sub">Healthcare-only vehicle targeting tech-enabled services and diagnostics. Fifth fund in the vertical — signals sustained institutional conviction.</div>
+          <div class="feed-meta">4 days ago <span class="feed-meta-dot"></span> Bloomberg</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="feed-card" data-tag="news">
+        <span class="feed-tag tag-news">News</span>
+        <div class="feed-content">
+          <div class="feed-title">Behavioral health demand outpacing supply — staffing crisis deepens</div>
+          <div class="feed-sub">New SAMHSA data shows 60M Americans with unmet mental health needs. Telehealth platforms scaling fastest but unit economics still unproven.</div>
+          <div class="feed-meta">5 days ago <span class="feed-meta-dot"></span> Fierce Healthcare</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+
+      <div class="feed-card" data-tag="deal">
+        <span class="feed-tag tag-deal">Deal</span>
+        <div class="feed-content">
+          <div class="feed-title">Optum acquires home health platform Amedisys for $3.3B — deal closes</div>
+          <div class="feed-sub">Strategic consolidation of home-based care accelerating. Raises competitive bar for independent home health platforms seeking PE backing.</div>
+          <div class="feed-meta">6 days ago <span class="feed-meta-dot"></span> Reuters</div>
+        </div>
+        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- SEARCH VIEW -->
+    <div class="search-view" id="searchView">
+      <div class="section-header">
+        <span class="section-label" id="searchResultLabel">Search results</span>
+      </div>
+      <div id="searchResults">
+        <div class="empty-panel" style="padding:60px 20px;">
+          <div class="empty-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <div class="empty-title">Search a company or subsector</div>
+          <div class="empty-sub">Type in the search bar above and press Enter to get a PE-lens briefing.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel" id="rightPanel">
+    <div class="panel-inner" id="panelInner">
+      <div class="empty-panel">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="empty-title">Select a story</div>
+        <div class="empty-sub">Click any item in the feed to see the full PE-angle analysis here.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let searchType = 'company';
+
+  function setSearchType(type) {
+    searchType = type;
+    document.getElementById('btnCompany').classList.toggle('active', type === 'company');
+    document.getElementById('btnSector').classList.toggle('active', type === 'sector');
+    document.getElementById('searchInput').placeholder = type === 'company'
+      ? 'Search company (e.g. Medtronic)...'
+      : 'Search subsector (e.g. biopharma)...';
+  }
+
+  function switchTab(tab, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const feedView = document.getElementById('feedView');
+    const searchView = document.getElementById('searchView');
+    if (tab === 'feed') {
+      feedView.classList.remove('hidden');
+      searchView.classList.remove('active');
+    } else {
+      feedView.classList.add('hidden');
+      searchView.classList.add('active');
+      setSearchType(tab === 'search' ? 'company' : 'sector');
+      document.getElementById('searchInput').focus();
+    }
+  }
+
+  function filterFeed(tag, el) {
+    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.feed-card').forEach(card => {
+      if (tag === 'all') {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = card.dataset.tag === tag ? 'flex' : 'none';
+      }
+    });
+  }
+
+  function showPanel(id) {
+    const panels = {
+      amedisys: {
+        name: 'Covenant Physician Partners',
+        sub: 'Multi-specialty physician management · Nashville, TN',
+        type: 'private',
+        rec: 'watch',
+        recLabel: 'Watch — deal closed',
+        metrics: [
+          { label: 'Deal size', val: '$1.8B' },
+          { label: 'Acquirer', val: 'KKR' },
+          { label: 'Prior owner', val: 'Warburg' },
+          { label: 'Hold period', val: '5 years' },
+        ],
+        snapshot: {
+          what: 'A company that employs and manages physicians across multiple specialties — think orthopedics, cardiology, gastroenterology — and handles all the business side so doctors can just focus on seeing patients.',
+          how: 'Makes money by taking a cut of physician billing revenue in exchange for handling admin, scheduling, billing, and management. The more physicians they employ and the more patient visits they drive, the more revenue they generate.'
+        },
+        earnings: 'Private company — limited financial disclosure. Deal valued at $1.8B implying roughly 14-16x EBITDA based on comparable physician group transactions. Warburg grew the platform from ~80 to 300+ physicians during their hold.',
+        mgmt: 'Management team is institutionally seasoned — this is a second PE bite so the operational infrastructure is already built. KKR likely sees further geographic expansion and specialty additions as the primary growth levers.',
+        news: 'Take-private closed this week. KKR outbid several other healthcare PE firms in a competitive process. Signals continued strong buyer appetite for physician management platforms despite reimbursement headwinds.',
+        pewhat: "This deal matters for two reasons. First, $1.8B at 14-16x EBITDA sets a clear comp for physician management platform valuations — useful when GHP is evaluating similar businesses. Second, KKR winning this means one of the most aggressive healthcare buyers just deployed a big check, which tightens supply of quality physician assets. If GHP has any physician management platforms on the watchlist, now is the time to move."
+      }
+    };
+
+    const data = panels[id];
+    if (!data) return;
+
+    const typeClass = data.type === 'private' ? 'private-badge' : 'public-badge';
+    const typeLabel = data.type === 'private' ? '🔒 Private' : '📈 Public';
+    const recClass = { pursue: 'rec-pursue', pass: 'rec-pass', watch: 'rec-watch' }[data.rec];
+
+    const metricsHtml = data.metrics.map(m => `
+      <div class="metric">
+        <div class="metric-label">${m.label}</div>
+        <div class="metric-val">${m.val}</div>
+      </div>`).join('');
+
+    document.getElementById('panelInner').innerHTML = `
+      <div class="panel-top">
+        <div class="panel-company">${data.name}</div>
+        <span class="${typeClass}">${typeLabel}</span>
+      </div>
+      <div class="panel-sub">${data.sub}</div>
+      <span class="rec-badge ${recClass}">${data.recLabel}</span>
+      <div class="metric-grid">${metricsHtml}</div>
+
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-card-header">
+          <div class="section-card-title">
+            <div class="section-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            What they do & how they make money
+          </div>
+          <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="section-preview">Plain-english breakdown of the business model.</div>
+        <div class="section-body">
+          <p><strong>What they do:</strong> ${data.snapshot.what}</p>
+          <p><strong>How they make money:</strong> ${data.snapshot.how}</p>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-card-header">
+          <div class="section-card-title">
+            <div class="section-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+            Earnings & financials
+          </div>
+          <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="section-preview">Key financial metrics and what the numbers say.</div>
+        <div class="section-body"><p>${data.earnings}</p></div>
+      </div>
+
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-card-header">
+          <div class="section-card-title">
+            <div class="section-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            What management is saying
+          </div>
+          <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="section-preview">Key themes and priorities from leadership.</div>
+        <div class="section-body"><p>${data.mgmt}</p></div>
+      </div>
+
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-card-header">
+          <div class="section-card-title">
+            <div class="section-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/><path d="M2 13h10M9 10l3 3-3 3"/></svg></div>
+            Recent news
+          </div>
+          <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="section-preview">What has happened recently and why it matters.</div>
+        <div class="section-body"><p>${data.news}</p></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="pewhat">
+        <div class="pewhat-label">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          PE so-what
+        </div>
+        <div class="pewhat-text">${data.pewhat}</div>
+      </div>
+    `;
+  }
+
+  function toggleSection(card) {
+    card.classList.toggle('open');
+  }
+
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && this.value.trim()) {
+      runSearch(this.value.trim());
+    }
+  });
+
+  function runSearch(query) {
+    const feedView = document.getElementById('feedView');
+    const searchView = document.getElementById('searchView');
+    feedView.classList.add('hidden');
+    searchView.classList.add('active');
+    document.getElementById('searchResultLabel').textContent = `Results for "${query}"`;
+    document.getElementById('searchResults').innerHTML = `
+      <div class="feed-card" style="cursor:default;">
+        <div class="feed-content">
+          <div class="loading-bar" style="width:60%"></div>
+          <div class="loading-bar" style="width:85%"></div>
+          <div class="loading-bar" style="width:45%"></div>
+        </div>
+      </div>`;
+    document.getElementById('panelInner').innerHTML = `
+      <div class="empty-panel">
+        <div class="empty-title" style="color:var(--text-secondary)">Searching for "${query}"...</div>
+        <div class="empty-sub">Live data coming in the next version — this is the static shell.</div>
+      </div>`;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab')[searchType === 'company' ? 1 : 2].classList.add('active');
+  }
+</script>
+</body>
+</html>

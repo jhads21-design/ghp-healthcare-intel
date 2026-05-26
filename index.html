@@ -120,7 +120,7 @@
 
     <div id="feedView">
       <div class="section-header">
-        <span class="section-label" id="feedLabel">Last 7 days — healthcare PE</span>
+        <span class="section-label" id="feedLabel">Recent healthcare PE news</span>
         <button class="refresh-btn" id="refreshBtn" onclick="loadFeed(true)">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
           Refresh feed
@@ -212,14 +212,12 @@
       <div class="skeleton"><div class="skel-bar" style="width:35%"></div><div class="skel-bar" style="width:80%"></div><div class="skel-bar" style="width:50%"></div></div>
       <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:60%"></div></div>`;
 
-    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
     try {
       const prompt = `You are a healthcare PE analyst for Great Hill Partners, a growth-oriented PE firm.
 
-Today's date is ${today}. Search the web using queries like "healthcare PE deals this week" and "healthcare private equity news ${today.split(',')[1].trim()}" to find 3 significant recent healthcare PE stories. Always search for the most current results available.
+Search the web for 3 significant recent healthcare private equity news stories. Focus on deals, regulatory changes, fund activity, and major market movements that matter to a PE investor.
 
-Respond in EXACTLY this format. No introduction, no extra text, just the stories:
+Respond in EXACTLY this format with no introduction or extra text:
 
 TITLE: [headline under 12 words]
 TAG: [one of: deal, reg, fund, news]
@@ -259,7 +257,7 @@ PEWHAT: [pewhat]`;
           </div>
         </div>`).join('');
 
-      document.getElementById('feedLabel').textContent = `Last 7 days — healthcare PE · ${today}`;
+      document.getElementById('feedLabel').textContent = 'Recent healthcare PE news';
     } catch (err) {
       document.getElementById('feedContent').innerHTML = `<div class="error-card">Failed to load feed: ${err.message}</div>`;
       document.getElementById('feedLabel').textContent = 'Feed unavailable';
@@ -284,19 +282,19 @@ PEWHAT: [pewhat]`;
       if (searchType === 'company') {
         prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
-Search the web for information about the company "${query}". Find recent news, financials, and business details.
+Search the web for information about the company "${query}".
 
 Respond in EXACTLY this format with no extra text:
 
 NAME: [company name]
 TYPE: [public or private]
 DESCRIPTOR: [one line: sector · location]
-WHAT_THEY_DO: [1-2 sentences plain english no jargon — what does this company actually do, explained simply]
+WHAT_THEY_DO: [1-2 sentences plain english no jargon]
 HOW_THEY_MAKE_MONEY: [1-2 sentences plain english on the revenue model]
-FINANCIALS: [2-3 sentences on recent financial performance with actual numbers where available. If private and data unavailable, say so.]
-MANAGEMENT: [2 sentences on what management is focused on or saying publicly]
+FINANCIALS: [2-3 sentences on recent financial performance with actual numbers where available]
+MANAGEMENT: [2 sentences on what management is focused on]
 NEWS: [2 sentences on the most recent significant news]
-PEWHAT: [2-3 sentences direct opinionated view — interesting or not for a growth PE healthcare investor right now and why. Be specific.]`;
+PEWHAT: [2-3 sentences direct opinionated view — interesting or not for a growth PE healthcare investor and why]`;
       } else {
         prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
@@ -310,12 +308,11 @@ WHATS_HAPPENING: [2-3 sentences on the current state right now]
 TRANSACTIONS: [2-3 sentences on notable recent M&A or PE deals]
 TAILWINDS: [2-3 sentences on key growth drivers]
 HEADWINDS: [2-3 sentences on key risks]
-REGULATORY: [2-3 sentences on the regulatory landscape and what is changing]
+REGULATORY: [2-3 sentences on the regulatory landscape]
 PEWHAT: [2-3 sentences direct opinionated view — lean in or avoid for GHP right now and why]`;
       }
 
       const raw = await callClaude(prompt, 1500);
-
       const get = (key) => {
         const match = raw.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z_]+:|$)', 's'));
         return match ? match[1].trim() : 'N/A';

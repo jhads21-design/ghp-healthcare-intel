@@ -1,0 +1,1 @@
+# ghp-healthcare-intel

@@ -43,59 +43,54 @@
   .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .section-label { font-size: 10.5px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
-  .filter-pills { display: flex; gap: 6px; }
-  .pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
-  .pill:hover, .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
-  .feed-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 12px; }
+  .refresh-btn { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--surface); color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+  .refresh-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .feed-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
   .feed-card:hover { border-color: var(--blue-accent); box-shadow: 0 2px 12px rgba(74,159,224,0.08); }
-  .feed-tag { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .feed-card.active { border-color: var(--blue-accent); border-width: 1px; }
+  .feed-card-top { display: flex; align-items: flex-start; gap: 12px; }
+  .feed-tag { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
   .tag-deal { background: var(--tag-deal-bg); color: var(--tag-deal-text); }
   .tag-reg { background: var(--tag-reg-bg); color: var(--tag-reg-text); }
   .tag-fund { background: var(--tag-fund-bg); color: var(--tag-fund-text); }
   .tag-news { background: var(--tag-news-bg); color: var(--tag-news-text); }
-  .feed-content { flex: 1; min-width: 0; }
+  .feed-content { flex: 1; }
   .feed-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; line-height: 1.45; }
-  .feed-sub { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
-  .feed-meta { font-size: 11px; color: var(--text-muted); margin-top: 7px; }
-  .chevron-icon { color: var(--border); flex-shrink: 0; margin-top: 2px; }
+  .feed-summary { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+  .feed-pewhat { margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); display: none; }
+  .feed-card.expanded .feed-pewhat { display: block; }
+  .pewhat-label { font-size: 10px; font-weight: 500; color: var(--pewhat-label); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 5px; }
+  .pewhat-text { font-size: 12.5px; color: var(--pewhat-text); line-height: 1.6; background: var(--pewhat-bg); border: 0.5px solid var(--pewhat-border); border-radius: var(--radius-sm); padding: 10px 12px; }
   .panel { width: 380px; background: var(--surface); border-left: 0.5px solid var(--border); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; }
   .panel-inner { overflow-y: auto; padding: 20px; flex: 1; }
   .panel-inner::-webkit-scrollbar { width: 4px; }
   .panel-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  .panel-company { font-size: 17px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+  .panel-company { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; line-height: 1.4; }
   .panel-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; }
-  .private-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--tag-reg-text); background: var(--tag-reg-bg); padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
-  .public-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--tag-news-text); background: var(--tag-news-bg); padding: 3px 8px; border-radius: 20px; margin-left: 8px; }
-  .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-  .metric { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
-  .metric-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .metric-val { font-size: 15px; font-weight: 500; color: var(--text-primary); font-family: 'DM Mono', monospace; }
+  .private-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--tag-reg-text); background: var(--tag-reg-bg); padding: 3px 8px; border-radius: 20px; margin-left: 6px; }
+  .public-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--tag-news-text); background: var(--tag-news-bg); padding: 3px 8px; border-radius: 20px; margin-left: 6px; }
+  .panel-section { margin-bottom: 14px; }
+  .panel-section-label { font-size: 10px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
+  .panel-section-text { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
   .divider { height: 0.5px; background: var(--border); margin: 14px 0; }
-  .section-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
-  .section-card:hover { border-color: var(--blue-accent); }
-  .section-card-header { display: flex; align-items: center; justify-content: space-between; }
-  .section-card-title { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--text-primary); }
-  .section-icon { width: 22px; height: 22px; background: var(--blue-light); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .section-preview { font-size: 12px; color: var(--text-secondary); margin-top: 7px; line-height: 1.55; }
-  .expand-icon { color: var(--text-muted); transition: transform 0.2s; }
-  .section-card.open .expand-icon { transform: rotate(180deg); }
-  .section-body { display: none; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border); font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
-  .section-card.open .section-body { display: block; }
-  .pewhat { background: var(--pewhat-bg); border: 0.5px solid var(--pewhat-border); border-radius: var(--radius-md); padding: 14px; margin-top: 4px; }
-  .pewhat-label { font-size: 10px; font-weight: 500; color: var(--pewhat-label); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
-  .pewhat-text { font-size: 12.5px; color: var(--pewhat-text); line-height: 1.6; }
+  .pewhat-panel { background: var(--pewhat-bg); border: 0.5px solid var(--pewhat-border); border-radius: var(--radius-md); padding: 14px; }
+  .pewhat-panel-label { font-size: 10px; font-weight: 500; color: var(--pewhat-label); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
+  .pewhat-panel-text { font-size: 12.5px; color: var(--pewhat-text); line-height: 1.6; }
   .empty-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center; }
   .empty-icon { width: 48px; height: 48px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
   .empty-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
   .empty-sub { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
-  .loading-wrap { padding: 20px; }
-  .loading-bar { height: 11px; background: var(--border); border-radius: 4px; margin-bottom: 10px; animation: pulse 1.5s ease infinite; }
+  .skeleton { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 10px; }
+  .skel-bar { height: 11px; background: var(--border); border-radius: 4px; margin-bottom: 8px; animation: pulse 1.5s ease infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   .error-card { background: #FCEBEB; border: 0.5px solid #F7C1C1; border-radius: var(--radius-md); padding: 14px; font-size: 12.5px; color: #A32D2D; line-height: 1.6; margin-bottom: 10px; }
-  .debug-card { background: #F8F9FB; border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 14px; font-size: 11px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 10px; font-family: 'DM Mono', monospace; word-break: break-all; max-height: 200px; overflow-y: auto; }
   .feed-view.hidden { display: none; }
   .search-view { display: none; }
   .search-view.active { display: block; }
+  .searching-state { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; }
+  .searching-text { font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+  .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-accent); animation: pulse 1s ease infinite; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -125,29 +120,25 @@
 
 <div class="app-body">
   <div class="main">
+
     <div id="feedView">
       <div class="section-header">
-        <span class="section-label" id="feedLabel">Loading deal feed...</span>
-        <div class="filter-pills">
-          <span class="pill active" onclick="filterFeed('all',this)">All</span>
-          <span class="pill" onclick="filterFeed('deal',this)">Deals</span>
-          <span class="pill" onclick="filterFeed('reg',this)">Regulatory</span>
-          <span class="pill" onclick="filterFeed('fund',this)">Funds</span>
-        </div>
+        <span class="section-label" id="feedLabel">Last 7 days — healthcare PE</span>
+        <button class="refresh-btn" id="refreshBtn" onclick="loadFeed()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+          Refresh feed
+        </button>
       </div>
       <div id="feedContent">
-        <div class="loading-wrap">
-          <div class="loading-bar" style="width:70%"></div>
-          <div class="loading-bar" style="width:90%"></div>
-          <div class="loading-bar" style="width:55%"></div>
-          <div class="loading-bar" style="width:80%"></div>
-          <div class="loading-bar" style="width:65%"></div>
-        </div>
+        <div class="skeleton"><div class="skel-bar" style="width:40%"></div><div class="skel-bar" style="width:75%"></div><div class="skel-bar" style="width:60%"></div></div>
+        <div class="skeleton"><div class="skel-bar" style="width:35%"></div><div class="skel-bar" style="width:80%"></div><div class="skel-bar" style="width:50%"></div></div>
+        <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:65%"></div></div>
       </div>
     </div>
+
     <div class="search-view" id="searchView">
       <div class="section-header">
-        <span class="section-label" id="searchLabel">Search results</span>
+        <span class="section-label" id="searchLabel">Search</span>
       </div>
       <div id="searchContent">
         <div class="empty-panel" style="padding:60px 20px;">
@@ -157,6 +148,7 @@
         </div>
       </div>
     </div>
+
   </div>
 
   <div class="panel">
@@ -173,253 +165,245 @@
 <script>
   const WORKER_URL = 'https://ghp-healthcare-api.jhads21.workers.dev';
   let searchType = 'company';
-  let feedItems = [];
+  let feedLoaded = false;
 
-  function extractJSON(text, isArray) {
-    if (!text) return null;
-    let cleaned = text.trim();
-    // Strip markdown code fences
-    cleaned = cleaned.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    // Find the outermost bracket
-    const openChar = isArray ? '[' : '{';
-    const closeChar = isArray ? ']' : '}';
-    const start = cleaned.indexOf(openChar);
-    const end = cleaned.lastIndexOf(closeChar);
-    if (start === -1 || end === -1) return null;
-    return cleaned.slice(start, end + 1);
-  }
-
-  async function callClaude(prompt) {
-    const response = await fetch(WORKER_URL, {
+  // Core API call — no JSON parsing, just returns raw text
+  async function callClaude(prompt, maxTokens) {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 2000,
+        max_tokens: maxTokens || 1500,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: prompt }]
       })
     });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      throw new Error(`Worker error ${response.status}: ${errText}`);
-    }
-
-    const data = await response.json();
-
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
     if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    const texts = (data.content || []).filter(b => b.type === 'text');
+    if (!texts.length) throw new Error('No text in response');
+    return texts[texts.length - 1].text.trim();
+  }
 
-    // Find the last text block — Claude puts final answer last
-    const textBlocks = (data.content || []).filter(b => b.type === 'text');
-    if (textBlocks.length === 0) throw new Error('No text response from Claude. Content: ' + JSON.stringify(data.content));
-    return textBlocks[textBlocks.length - 1].text;
+  // Parse plain text response into structured card data
+  // Format we ask Claude to return:
+  // TITLE: ...
+  // TAG: deal|reg|fund|news
+  // SUMMARY: ...
+  // PEWHAT: ...
+  // ---
+  function parseCards(text) {
+    const blocks = text.split(/\n---+\n/).map(b => b.trim()).filter(Boolean);
+    return blocks.map(block => {
+      const get = (key) => {
+        const match = block.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z]+:|$)', 's'));
+        return match ? match[1].trim() : '';
+      };
+      return {
+        title: get('TITLE'),
+        tag: (get('TAG') || 'news').toLowerCase().trim(),
+        summary: get('SUMMARY'),
+        pewhat: get('PEWHAT')
+      };
+    }).filter(c => c.title);
   }
 
   async function loadFeed() {
+    if (feedLoaded) {
+      const confirmed = confirm('Refresh the feed? This will use API credits.');
+      if (!confirmed) return;
+    }
+    feedLoaded = true;
+    document.getElementById('refreshBtn').disabled = true;
+    document.getElementById('feedLabel').textContent = 'Loading...';
+    document.getElementById('feedContent').innerHTML = `
+      <div class="skeleton"><div class="skel-bar" style="width:40%"></div><div class="skel-bar" style="width:75%"></div><div class="skel-bar" style="width:55%"></div></div>
+      <div class="skeleton"><div class="skel-bar" style="width:35%"></div><div class="skel-bar" style="width:80%"></div><div class="skel-bar" style="width:50%"></div></div>
+      <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:60%"></div></div>`;
+
     try {
-      const prompt = `You are a healthcare PE analyst for Great Hill Partners.
+      const prompt = `You are a healthcare PE analyst for Great Hill Partners, a growth-oriented PE firm.
 
-Search the web for recent healthcare private equity news from the last 7 days. Find 3 significant stories across: PE deals/acquisitions, regulatory changes, fund activity, and market developments.
+Search the web for 3 significant healthcare PE news stories from the last 7 days. Focus on: PE deals, regulatory changes affecting healthcare investing, fund activity, or major market movements.
 
-You MUST respond with ONLY a valid JSON array. No introduction, no explanation, no markdown, no code fences. Start your response with [ and end with ].
+For each story respond in EXACTLY this format with no extra text before or after:
 
-Each object in the array must have exactly these fields:
-{
-  "tag": "deal" or "reg" or "fund" or "news",
-  "title": "headline under 12 words",
-  "summary": "2 sentence plain english summary",
-  "meta": "X days ago · Source",
-  "detail": "3-4 sentence expanded analysis of what happened",
-  "pewhat": "2-3 sentences direct opinionated view on why this matters or does not matter for a growth PE healthcare investor"
-}
+TITLE: [headline under 12 words]
+TAG: [one of: deal, reg, fund, news]
+SUMMARY: [2 sentences plain english — what happened and why it matters factually]
+PEWHAT: [2 sentences direct opinionated view for a growth PE healthcare investor — should they care or not and why]
 
-Remember: respond with ONLY the JSON array, nothing else.`;
+---
 
-      const raw = await callClaude(prompt);
-      const jsonStr = extractJSON(raw, true);
-      if (!jsonStr) throw new Error('Could not find JSON array in response. Raw: ' + raw.substring(0, 200));
-      feedItems = JSON.parse(jsonStr);
-      renderFeed(feedItems);
+TITLE: [next story]
+TAG: [tag]
+SUMMARY: [summary]
+PEWHAT: [pewhat]
+
+---
+
+TITLE: [next story]
+TAG: [tag]
+SUMMARY: [summary]
+PEWHAT: [pewhat]`;
+
+      const raw = await callClaude(prompt, 1500);
+      const cards = parseCards(raw);
+
+      if (!cards.length) throw new Error('Could not parse stories from response.');
+
+      document.getElementById('feedContent').innerHTML = cards.map((c, i) => `
+        <div class="feed-card" onclick="toggleCard(this, ${i})" data-idx="${i}">
+          <div class="feed-card-top">
+            <span class="feed-tag tag-${c.tag}">${tagLabel(c.tag)}</span>
+            <div class="feed-content">
+              <div class="feed-title">${c.title}</div>
+              <div class="feed-summary">${c.summary}</div>
+            </div>
+          </div>
+          <div class="feed-pewhat">
+            <div class="pewhat-label">PE so-what</div>
+            <div class="pewhat-text">${c.pewhat}</div>
+          </div>
+        </div>`).join('');
+
       document.getElementById('feedLabel').textContent = 'Last 7 days — healthcare PE';
     } catch (err) {
-      document.getElementById('feedContent').innerHTML = `
-        <div class="error-card">Failed to load feed. Error: ${err.message}</div>`;
+      document.getElementById('feedContent').innerHTML = `<div class="error-card">Failed to load feed: ${err.message}</div>`;
       document.getElementById('feedLabel').textContent = 'Feed unavailable';
+      feedLoaded = false;
     }
+    document.getElementById('refreshBtn').disabled = false;
   }
 
-  function renderFeed(items) {
-    document.getElementById('feedContent').innerHTML = items.map((item, i) => `
-      <div class="feed-card" onclick="showFeedDetail(${i})" data-tag="${item.tag}">
-        <span class="feed-tag tag-${item.tag}">${tagLabel(item.tag)}</span>
-        <div class="feed-content">
-          <div class="feed-title">${item.title}</div>
-          <div class="feed-sub">${item.summary}</div>
-          <div class="feed-meta">${item.meta}</div>
-        </div>
-        <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-      </div>`).join('');
+  function toggleCard(card, idx) {
+    card.classList.toggle('expanded');
   }
 
   function tagLabel(tag) {
     return { deal: 'Deal', reg: 'Regulatory', fund: 'Fund activity', news: 'News' }[tag] || 'News';
   }
 
-  function showFeedDetail(i) {
-    const item = feedItems[i];
-    if (!item) return;
-    document.getElementById('panelInner').innerHTML = `
-      <div style="margin-bottom:16px;">
-        <span class="feed-tag tag-${item.tag}" style="margin-bottom:10px;display:inline-block;">${tagLabel(item.tag)}</span>
-        <div class="panel-company" style="font-size:15px;line-height:1.4;">${item.title}</div>
-        <div class="panel-sub" style="margin-top:6px;">${item.meta}</div>
-      </div>
-      ${sectionCard('What happened', item.detail, true)}
-      <div class="divider"></div>
-      <div class="pewhat"><div class="pewhat-label">PE so-what</div><div class="pewhat-text">${item.pewhat}</div></div>`;
-  }
-
   async function runSearch(query) {
     document.getElementById('feedView').classList.add('hidden');
     document.getElementById('searchView').classList.add('active');
-    document.getElementById('searchLabel').textContent = `Results for "${query}"`;
-    document.getElementById('searchContent').innerHTML = `<div class="loading-wrap"><div class="loading-bar" style="width:70%"></div><div class="loading-bar" style="width:85%"></div><div class="loading-bar" style="width:55%"></div></div>`;
-    document.getElementById('panelInner').innerHTML = `<div class="empty-panel"><div class="empty-title" style="color:var(--text-secondary)">Researching "${query}"...</div><div class="empty-sub">Pulling live data — takes about 15 seconds.</div></div>`;
+    document.getElementById('searchLabel').textContent = `Searching "${query}"...`;
+    document.getElementById('searchContent').innerHTML = `
+      <div class="searching-state">
+        <div class="searching-text"><div class="dot-pulse"></div>Searching the web for "${query}"...</div>
+        <div class="searching-text" style="opacity:0.6;animation-delay:0.3s"><div class="dot-pulse"></div>Pulling recent news and financials...</div>
+        <div class="searching-text" style="opacity:0.4;animation-delay:0.6s"><div class="dot-pulse"></div>Building PE analysis...</div>
+      </div>`;
+    document.getElementById('panelInner').innerHTML = `<div class="empty-panel"><div class="empty-title" style="color:var(--text-secondary)">Researching...</div></div>`;
 
     try {
       let prompt;
       if (searchType === 'company') {
         prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
-Research the company "${query}" using web search. Find recent earnings, news, and business information.
+Search the web for information about the company "${query}". Find recent news, financials, and business details.
 
-You MUST respond with ONLY a valid JSON object. No introduction, no explanation, no markdown, no code fences. Start with { and end with }.
+Respond in EXACTLY this format:
 
-{
-  "name": "company name",
-  "type": "public or private",
-  "sub": "one line: sector · location",
-  "what_they_do": "1-2 sentences plain english, no jargon. Example: They make small coils inserted into brain blood vessels to stop bleeding.",
-  "how_they_make_money": "1-2 sentences plain english on the revenue model.",
-  "metrics": [
-    {"label": "Revenue", "val": "value or N/A"},
-    {"label": "EBITDA", "val": "value or N/A"},
-    {"label": "Growth", "val": "value or N/A"},
-    {"label": "Ownership", "val": "public/private/PE-backed"}
-  ],
-  "earnings": "2-3 sentences on recent financials and key metrics with actual numbers where available.",
-  "management": "2-3 sentences on what management is focused on and key themes.",
-  "news": "2-3 sentences on the most recent significant news.",
-  "pewhat": "2-3 sentences direct opinionated view: interesting or not for a growth PE healthcare investor and why. Be specific."
-}`;
+NAME: [company name]
+TYPE: [public or private]
+DESCRIPTOR: [one line: sector · location]
+WHAT_THEY_DO: [1-2 sentences plain english, no jargon. Explain what the company does like you are talking to a smart non-healthcare person]
+HOW_THEY_MAKE_MONEY: [1-2 sentences plain english on the revenue model]
+FINANCIALS: [2-3 sentences on recent financial performance with actual numbers where available. If private say so.]
+MANAGEMENT: [2 sentences on what management is focused on or saying publicly]
+NEWS: [2 sentences on the most recent significant news about this company]
+PEWHAT: [2-3 sentences direct opinionated view: interesting or not for a growth PE healthcare investor right now and why. Be specific and direct.]`;
       } else {
         prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
-Research the healthcare subsector "${query}" using web search.
+Search the web for recent information about the healthcare subsector "${query}".
 
-You MUST respond with ONLY a valid JSON object. No introduction, no explanation, no markdown, no code fences. Start with { and end with }.
+Respond in EXACTLY this format:
 
-{
-  "name": "subsector name",
-  "sub": "brief descriptor",
-  "whats_happening": "2-3 sentences on the current state right now.",
-  "transactions": "2-3 sentences on notable recent M&A or PE deals.",
-  "tailwinds": "2-3 sentences on key growth drivers.",
-  "headwinds": "2-3 sentences on key risks and challenges.",
-  "regulatory": "2-3 sentences on the regulatory landscape and what is changing.",
-  "pewhat": "2-3 sentences direct opinionated view: lean in or avoid for GHP right now and why."
-}`;
+NAME: [subsector name]
+DESCRIPTOR: [brief descriptor]
+WHATS_HAPPENING: [2-3 sentences on the current state of this subsector right now]
+TRANSACTIONS: [2-3 sentences on notable recent M&A or PE deals]
+TAILWINDS: [2-3 sentences on key growth drivers]
+HEADWINDS: [2-3 sentences on key risks]
+REGULATORY: [2-3 sentences on the regulatory landscape and what is changing]
+PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right now and why]`;
       }
 
-      const raw = await callClaude(prompt);
-      const isArray = false;
-      const jsonStr = extractJSON(raw, isArray);
-      if (!jsonStr) throw new Error('Could not parse response. Raw: ' + raw.substring(0, 300));
-      const data = JSON.parse(jsonStr);
+      const raw = await callClaude(prompt, 1500);
+      const get = (key) => {
+        const match = raw.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z_]+:|$)', 's'));
+        return match ? match[1].trim() : 'N/A';
+      };
 
-      if (searchType === 'company') renderCompanyResult(data);
-      else renderSectorResult(data);
-
+      if (searchType === 'company') {
+        const type = get('TYPE').toLowerCase();
+        const typeClass = type === 'private' ? 'private-badge' : 'public-badge';
+        const typeBadge = type === 'private' ? '🔒 Private' : '📈 Public';
+        document.getElementById('searchContent').innerHTML = `
+          <div class="feed-card" style="cursor:default;">
+            <div class="feed-content">
+              <div class="feed-title" style="font-size:15px;">${get('NAME')} <span class="${typeClass}">${typeBadge}</span></div>
+              <div class="feed-summary" style="margin-top:4px;">${get('DESCRIPTOR')}</div>
+            </div>
+          </div>`;
+        document.getElementById('panelInner').innerHTML = `
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px;">
+              <div class="panel-company">${get('NAME')}</div>
+              <span class="${typeClass}">${typeBadge}</span>
+            </div>
+            <div class="panel-sub">${get('DESCRIPTOR')}</div>
+          </div>
+          ${panelSection('What they do', get('WHAT_THEY_DO'))}
+          ${panelSection('How they make money', get('HOW_THEY_MAKE_MONEY'))}
+          ${panelSection('Financials', get('FINANCIALS'))}
+          ${panelSection('What management is saying', get('MANAGEMENT'))}
+          ${panelSection('Recent news', get('NEWS'))}
+          <div class="divider"></div>
+          <div class="pewhat-panel">
+            <div class="pewhat-panel-label">PE so-what</div>
+            <div class="pewhat-panel-text">${get('PEWHAT')}</div>
+          </div>`;
+      } else {
+        document.getElementById('searchContent').innerHTML = `
+          <div class="feed-card" style="cursor:default;">
+            <div class="feed-content">
+              <div class="feed-title" style="font-size:15px;">${get('NAME')}</div>
+              <div class="feed-summary" style="margin-top:4px;">${get('DESCRIPTOR')}</div>
+            </div>
+          </div>`;
+        document.getElementById('panelInner').innerHTML = `
+          <div style="margin-bottom:16px;">
+            <div class="panel-company">${get('NAME')}</div>
+            <div class="panel-sub">${get('DESCRIPTOR')}</div>
+          </div>
+          ${panelSection("What's happening now", get('WHATS_HAPPENING'))}
+          ${panelSection('Recent transactions', get('TRANSACTIONS'))}
+          ${panelSection('Tailwinds', get('TAILWINDS'))}
+          ${panelSection('Headwinds', get('HEADWINDS'))}
+          ${panelSection('Regulatory landscape', get('REGULATORY'))}
+          <div class="divider"></div>
+          <div class="pewhat-panel">
+            <div class="pewhat-panel-label">PE so-what</div>
+            <div class="pewhat-panel-text">${get('PEWHAT')}</div>
+          </div>`;
+      }
+      document.getElementById('searchLabel').textContent = `Results for "${query}"`;
     } catch (err) {
       document.getElementById('searchContent').innerHTML = `<div class="error-card">Search failed: ${err.message}</div>`;
-      document.getElementById('panelInner').innerHTML = `<div class="empty-panel"><div class="empty-title" style="color:var(--text-secondary)">Search failed</div><div class="empty-sub">Try again or check your connection.</div></div>`;
+      document.getElementById('searchLabel').textContent = 'Search failed';
     }
   }
 
-  function renderCompanyResult(d) {
-    const typeClass = d.type === 'private' ? 'private-badge' : 'public-badge';
-    const typeLabel = d.type === 'private' ? '🔒 Private' : '📈 Public';
-    const metricsHtml = (d.metrics || []).map(m => `<div class="metric"><div class="metric-label">${m.label}</div><div class="metric-val">${m.val}</div></div>`).join('');
-    document.getElementById('searchContent').innerHTML = `
-      <div class="feed-card" style="cursor:default;">
-        <div class="feed-content">
-          <div class="feed-title" style="font-size:15px;">${d.name} <span class="${typeClass}">${typeLabel}</span></div>
-          <div class="feed-sub" style="margin-top:4px;">${d.sub}</div>
-        </div>
-      </div>`;
-    document.getElementById('panelInner').innerHTML = `
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
-          <div class="panel-company">${d.name}</div>
-          <span class="${typeClass}">${typeLabel}</span>
-        </div>
-        <div class="panel-sub">${d.sub}</div>
-      </div>
-      <div class="metric-grid">${metricsHtml}</div>
-      ${sectionCard('What they do & how they make money', `<p><strong>What they do:</strong> ${d.what_they_do}</p><p style="margin-top:8px;"><strong>How they make money:</strong> ${d.how_they_make_money}</p>`, true)}
-      ${sectionCard('Earnings & financials', d.earnings, false)}
-      ${sectionCard('What management is saying', d.management, false)}
-      ${sectionCard('Recent news', d.news, false)}
-      <div class="divider"></div>
-      <div class="pewhat"><div class="pewhat-label">PE so-what</div><div class="pewhat-text">${d.pewhat}</div></div>`;
-  }
-
-  function renderSectorResult(d) {
-    document.getElementById('searchContent').innerHTML = `
-      <div class="feed-card" style="cursor:default;">
-        <div class="feed-content">
-          <div class="feed-title" style="font-size:15px;">${d.name}</div>
-          <div class="feed-sub" style="margin-top:4px;">${d.sub}</div>
-        </div>
-      </div>`;
-    document.getElementById('panelInner').innerHTML = `
-      <div style="margin-bottom:14px;">
-        <div class="panel-company">${d.name}</div>
-        <div class="panel-sub">${d.sub}</div>
-      </div>
-      ${sectionCard("What's happening now", d.whats_happening, true)}
-      ${sectionCard('Recent transactions', d.transactions, false)}
-      ${sectionCard('Tailwinds', d.tailwinds, false)}
-      ${sectionCard('Headwinds', d.headwinds, false)}
-      ${sectionCard('Regulatory landscape', d.regulatory, false)}
-      <div class="divider"></div>
-      <div class="pewhat"><div class="pewhat-label">PE so-what</div><div class="pewhat-text">${d.pewhat}</div></div>`;
-  }
-
-  function sectionCard(title, content, open) {
-    const preview = content.replace(/<[^>]+>/g, '').substring(0, 80) + '...';
-    return `<div class="section-card ${open ? 'open' : ''}" onclick="toggleSection(this)">
-      <div class="section-card-header">
-        <div class="section-card-title">
-          <div class="section-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-          ${title}
-        </div>
-        <svg class="expand-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-      </div>
-      <div class="section-preview">${preview}</div>
-      <div class="section-body">${content}</div>
+  function panelSection(label, text) {
+    return `<div class="panel-section">
+      <div class="panel-section-label">${label}</div>
+      <div class="panel-section-text">${text}</div>
     </div>`;
-  }
-
-  function toggleSection(card) { card.classList.toggle('open'); }
-
-  function filterFeed(tag, el) {
-    document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    document.querySelectorAll('#feedContent .feed-card').forEach(card => {
-      card.style.display = (tag === 'all' || card.dataset.tag === tag) ? 'flex' : 'none';
-    });
   }
 
   function setSearchType(type) {
@@ -449,6 +433,7 @@ You MUST respond with ONLY a valid JSON object. No introduction, no explanation,
     if (e.key === 'Enter' && this.value.trim()) runSearch(this.value.trim());
   });
 
+  // Load feed automatically on first open only
   loadFeed();
 </script>
 </body>

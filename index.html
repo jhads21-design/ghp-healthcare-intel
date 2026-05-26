@@ -48,7 +48,6 @@
   .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .feed-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; }
   .feed-card:hover { border-color: var(--blue-accent); box-shadow: 0 2px 12px rgba(74,159,224,0.08); }
-  .feed-card.active { border-color: var(--blue-accent); border-width: 1px; }
   .feed-card-top { display: flex; align-items: flex-start; gap: 12px; }
   .feed-tag { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
   .tag-deal { background: var(--tag-deal-bg); color: var(--tag-deal-text); }
@@ -88,9 +87,7 @@
   .feed-view.hidden { display: none; }
   .search-view { display: none; }
   .search-view.active { display: block; }
-  .searching-state { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; }
-  .searching-text { font-size: 12.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
-  .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-accent); animation: pulse 1s ease infinite; flex-shrink: 0; }
+  .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-accent); animation: pulse 1s ease infinite; flex-shrink: 0; display: inline-block; margin-right: 8px; }
 </style>
 </head>
 <body>
@@ -124,15 +121,15 @@
     <div id="feedView">
       <div class="section-header">
         <span class="section-label" id="feedLabel">Last 7 days — healthcare PE</span>
-        <button class="refresh-btn" id="refreshBtn" onclick="loadFeed()">
+        <button class="refresh-btn" id="refreshBtn" onclick="loadFeed(true)">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
           Refresh feed
         </button>
       </div>
       <div id="feedContent">
-        <div class="skeleton"><div class="skel-bar" style="width:40%"></div><div class="skel-bar" style="width:75%"></div><div class="skel-bar" style="width:60%"></div></div>
+        <div class="skeleton"><div class="skel-bar" style="width:40%"></div><div class="skel-bar" style="width:75%"></div><div class="skel-bar" style="width:55%"></div></div>
         <div class="skeleton"><div class="skel-bar" style="width:35%"></div><div class="skel-bar" style="width:80%"></div><div class="skel-bar" style="width:50%"></div></div>
-        <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:65%"></div></div>
+        <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:60%"></div></div>
       </div>
     </div>
 
@@ -156,7 +153,7 @@
       <div class="empty-panel">
         <div class="empty-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4A9FE0" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
         <div class="empty-title">Select a story</div>
-        <div class="empty-sub">Click any item in the feed to see the full PE-angle analysis.</div>
+        <div class="empty-sub">Click any item in the feed to expand the PE so-what.</div>
       </div>
     </div>
   </div>
@@ -167,7 +164,6 @@
   let searchType = 'company';
   let feedLoaded = false;
 
-  // Core API call — no JSON parsing, just returns raw text
   async function callClaude(prompt, maxTokens) {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
@@ -187,18 +183,11 @@
     return texts[texts.length - 1].text.trim();
   }
 
-  // Parse plain text response into structured card data
-  // Format we ask Claude to return:
-  // TITLE: ...
-  // TAG: deal|reg|fund|news
-  // SUMMARY: ...
-  // PEWHAT: ...
-  // ---
   function parseCards(text) {
     const blocks = text.split(/\n---+\n/).map(b => b.trim()).filter(Boolean);
     return blocks.map(block => {
       const get = (key) => {
-        const match = block.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z]+:|$)', 's'));
+        const match = block.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z_]+:|$)', 's'));
         return match ? match[1].trim() : '';
       };
       return {
@@ -210,8 +199,8 @@
     }).filter(c => c.title);
   }
 
-  async function loadFeed() {
-    if (feedLoaded) {
+  async function loadFeed(manual) {
+    if (manual) {
       const confirmed = confirm('Refresh the feed? This will use API credits.');
       if (!confirmed) return;
     }
@@ -223,39 +212,40 @@
       <div class="skeleton"><div class="skel-bar" style="width:35%"></div><div class="skel-bar" style="width:80%"></div><div class="skel-bar" style="width:50%"></div></div>
       <div class="skeleton"><div class="skel-bar" style="width:45%"></div><div class="skel-bar" style="width:70%"></div><div class="skel-bar" style="width:60%"></div></div>`;
 
+    const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
     try {
       const prompt = `You are a healthcare PE analyst for Great Hill Partners, a growth-oriented PE firm.
 
-Search the web for 3 significant healthcare PE news stories published in the last 7 days. You must check the publication date of each story before including it. If a story is older than 7 days, do not include it. If you cannot find 3 stories from the last 7 days, only return what you find — do not include older stories to fill the gap. Focus on: PE deals, regulatory changes affecting healthcare investing, fund activity, or major market movements.
+Today's date is ${today}. Search the web for 3 healthcare PE news stories. Every story you include MUST have been published within the last 7 days. Before including any story, check its publication date. If it is older than 7 days, skip it and find another. If you cannot find 3 recent stories, only return the ones you find — do not pad with older stories.
 
-For each story respond in EXACTLY this format with no extra text before or after:
+Respond in EXACTLY this format. No introduction, no extra text, just the stories:
 
 TITLE: [headline under 12 words]
 TAG: [one of: deal, reg, fund, news]
-SUMMARY: [2 sentences plain english — what happened and why it matters factually]
-PEWHAT: [2 sentences direct opinionated view for a growth PE healthcare investor — should they care or not and why]
+SUMMARY: [2 sentences plain english — what happened and the key facts]
+PEWHAT: [2 sentences direct opinionated view — should a growth PE healthcare investor care about this and why]
 
 ---
 
-TITLE: [next story]
+TITLE: [headline]
 TAG: [tag]
 SUMMARY: [summary]
 PEWHAT: [pewhat]
 
 ---
 
-TITLE: [next story]
+TITLE: [headline]
 TAG: [tag]
 SUMMARY: [summary]
 PEWHAT: [pewhat]`;
 
       const raw = await callClaude(prompt, 1500);
       const cards = parseCards(raw);
-
-      if (!cards.length) throw new Error('Could not parse stories from response.');
+      if (!cards.length) throw new Error('No stories found in response.');
 
       document.getElementById('feedContent').innerHTML = cards.map((c, i) => `
-        <div class="feed-card" onclick="toggleCard(this, ${i})" data-idx="${i}">
+        <div class="feed-card" onclick="this.classList.toggle('expanded')" data-idx="${i}">
           <div class="feed-card-top">
             <span class="feed-tag tag-${c.tag}">${tagLabel(c.tag)}</span>
             <div class="feed-content">
@@ -269,17 +259,13 @@ PEWHAT: [pewhat]`;
           </div>
         </div>`).join('');
 
-      document.getElementById('feedLabel').textContent = 'Last 7 days — healthcare PE';
+      document.getElementById('feedLabel').textContent = `Last 7 days — healthcare PE · ${today}`;
     } catch (err) {
       document.getElementById('feedContent').innerHTML = `<div class="error-card">Failed to load feed: ${err.message}</div>`;
       document.getElementById('feedLabel').textContent = 'Feed unavailable';
       feedLoaded = false;
     }
     document.getElementById('refreshBtn').disabled = false;
-  }
-
-  function toggleCard(card, idx) {
-    card.classList.toggle('expanded');
   }
 
   function tagLabel(tag) {
@@ -290,12 +276,7 @@ PEWHAT: [pewhat]`;
     document.getElementById('feedView').classList.add('hidden');
     document.getElementById('searchView').classList.add('active');
     document.getElementById('searchLabel').textContent = `Searching "${query}"...`;
-    document.getElementById('searchContent').innerHTML = `
-      <div class="searching-state">
-        <div class="searching-text"><div class="dot-pulse"></div>Searching the web for "${query}"...</div>
-        <div class="searching-text" style="opacity:0.6;animation-delay:0.3s"><div class="dot-pulse"></div>Pulling recent news and financials...</div>
-        <div class="searching-text" style="opacity:0.4;animation-delay:0.6s"><div class="dot-pulse"></div>Building PE analysis...</div>
-      </div>`;
+    document.getElementById('searchContent').innerHTML = `<div style="padding:20px 0;font-size:12.5px;color:var(--text-secondary);"><span class="dot-pulse"></span>Researching "${query}" — takes about 15 seconds...</div>`;
     document.getElementById('panelInner').innerHTML = `<div class="empty-panel"><div class="empty-title" style="color:var(--text-secondary)">Researching...</div></div>`;
 
     try {
@@ -305,35 +286,36 @@ PEWHAT: [pewhat]`;
 
 Search the web for information about the company "${query}". Find recent news, financials, and business details.
 
-Respond in EXACTLY this format:
+Respond in EXACTLY this format with no extra text:
 
 NAME: [company name]
 TYPE: [public or private]
 DESCRIPTOR: [one line: sector · location]
-WHAT_THEY_DO: [1-2 sentences plain english, no jargon. Explain what the company does like you are talking to a smart non-healthcare person]
+WHAT_THEY_DO: [1-2 sentences plain english no jargon — what does this company actually do, explained simply]
 HOW_THEY_MAKE_MONEY: [1-2 sentences plain english on the revenue model]
-FINANCIALS: [2-3 sentences on recent financial performance with actual numbers where available. If private say so.]
+FINANCIALS: [2-3 sentences on recent financial performance with actual numbers where available. If private and data unavailable, say so.]
 MANAGEMENT: [2 sentences on what management is focused on or saying publicly]
-NEWS: [2 sentences on the most recent significant news about this company]
-PEWHAT: [2-3 sentences direct opinionated view: interesting or not for a growth PE healthcare investor right now and why. Be specific and direct.]`;
+NEWS: [2 sentences on the most recent significant news]
+PEWHAT: [2-3 sentences direct opinionated view — interesting or not for a growth PE healthcare investor right now and why. Be specific.]`;
       } else {
         prompt = `You are a healthcare PE analyst for Great Hill Partners.
 
 Search the web for recent information about the healthcare subsector "${query}".
 
-Respond in EXACTLY this format:
+Respond in EXACTLY this format with no extra text:
 
 NAME: [subsector name]
 DESCRIPTOR: [brief descriptor]
-WHATS_HAPPENING: [2-3 sentences on the current state of this subsector right now]
+WHATS_HAPPENING: [2-3 sentences on the current state right now]
 TRANSACTIONS: [2-3 sentences on notable recent M&A or PE deals]
 TAILWINDS: [2-3 sentences on key growth drivers]
 HEADWINDS: [2-3 sentences on key risks]
 REGULATORY: [2-3 sentences on the regulatory landscape and what is changing]
-PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right now and why]`;
+PEWHAT: [2-3 sentences direct opinionated view — lean in or avoid for GHP right now and why]`;
       }
 
       const raw = await callClaude(prompt, 1500);
+
       const get = (key) => {
         const match = raw.match(new RegExp(key + ':\\s*(.+?)(?=\\n[A-Z_]+:|$)', 's'));
         return match ? match[1].trim() : 'N/A';
@@ -358,11 +340,11 @@ PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right n
             </div>
             <div class="panel-sub">${get('DESCRIPTOR')}</div>
           </div>
-          ${panelSection('What they do', get('WHAT_THEY_DO'))}
-          ${panelSection('How they make money', get('HOW_THEY_MAKE_MONEY'))}
-          ${panelSection('Financials', get('FINANCIALS'))}
-          ${panelSection('What management is saying', get('MANAGEMENT'))}
-          ${panelSection('Recent news', get('NEWS'))}
+          ${ps('What they do', get('WHAT_THEY_DO'))}
+          ${ps('How they make money', get('HOW_THEY_MAKE_MONEY'))}
+          ${ps('Financials', get('FINANCIALS'))}
+          ${ps('What management is saying', get('MANAGEMENT'))}
+          ${ps('Recent news', get('NEWS'))}
           <div class="divider"></div>
           <div class="pewhat-panel">
             <div class="pewhat-panel-label">PE so-what</div>
@@ -381,11 +363,11 @@ PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right n
             <div class="panel-company">${get('NAME')}</div>
             <div class="panel-sub">${get('DESCRIPTOR')}</div>
           </div>
-          ${panelSection("What's happening now", get('WHATS_HAPPENING'))}
-          ${panelSection('Recent transactions', get('TRANSACTIONS'))}
-          ${panelSection('Tailwinds', get('TAILWINDS'))}
-          ${panelSection('Headwinds', get('HEADWINDS'))}
-          ${panelSection('Regulatory landscape', get('REGULATORY'))}
+          ${ps("What's happening now", get('WHATS_HAPPENING'))}
+          ${ps('Recent transactions', get('TRANSACTIONS'))}
+          ${ps('Tailwinds', get('TAILWINDS'))}
+          ${ps('Headwinds', get('HEADWINDS'))}
+          ${ps('Regulatory landscape', get('REGULATORY'))}
           <div class="divider"></div>
           <div class="pewhat-panel">
             <div class="pewhat-panel-label">PE so-what</div>
@@ -399,7 +381,7 @@ PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right n
     }
   }
 
-  function panelSection(label, text) {
+  function ps(label, text) {
     return `<div class="panel-section">
       <div class="panel-section-label">${label}</div>
       <div class="panel-section-text">${text}</div>
@@ -433,8 +415,7 @@ PEWHAT: [2-3 sentences direct opinionated view: lean in or avoid for GHP right n
     if (e.key === 'Enter' && this.value.trim()) runSearch(this.value.trim());
   });
 
-  // Load feed automatically on first open only
-  loadFeed();
+  loadFeed(false);
 </script>
 </body>
 </html>
